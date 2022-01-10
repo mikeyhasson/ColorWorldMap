@@ -27,3 +27,6 @@ SVG tool that colors chosen countries in the World Map, and crop-masks irrelevan
    you can specify a chosen language code by appending "-#CODE" to the mode name. eg. bilateral-he for Hebrew.
    Will look for match in wikidata to translate the name.
  
+ 
+<code>python ColorWorldMap.py bilateral Angola-Italy</code>  =
+<img src="https://github.com/mikeyhasson/ColorWorldMap/blob/7fba3f7ec7752854df43fb51f76401dad7ecc983/Angola-Italy%20locator.svg">
