@@ -14,6 +14,8 @@ SVG tool that colors chosen countries in the World Map, and crop-masks irrelevan
   
   4. <code>python ColorWorldMap.py filename instructions_file</code>
        define coloring freely.
+       
+  5. <code>python ColorWorldMap.py index</code> to get index of countries.
  
  **instructions_file:**
  
