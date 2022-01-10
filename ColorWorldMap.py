@@ -74,6 +74,8 @@ def create_file(lst, lines):
 
 
 def translate_country(country, lang):
+
+    country = country.strip()
     query_country = F"""SELECT ?res
     {{
       ?item wdt:P297 ?value .
@@ -93,7 +95,6 @@ def translate_country(country, lang):
       FILTER(LANG(?itemLabelen) = "en") .
       BIND (CONCAT ("x",LCASE(SUBSTR(?itemLabelen, 1, 1))) as ?res).
     }}"""
-
     queries = [query_country, query_disputed]
     for query in queries:
         res = return_sparql_query_results(query)
@@ -111,7 +112,7 @@ def translate_countries(lst, lang):
 
 
 def get_color(x, multiple=False):
-    color_picks = list(mcolors.TABLEAU_COLORS.keys()).shuffle
+    color_picks = list(mcolors.TABLEAU_COLORS.keys())
     random.shuffle(color_picks)
 
     if not multiple:
@@ -310,8 +311,10 @@ if __name__ == "__main__":
         out_filename+= " locator"
         lst = [[x, y] for x, y in zip(countries, ["#008000", "#e3801c"])]
     elif 3 <= len(args) <= 4:
-        if len(args) == 3:  # format is: filename instructions_file
-            color_format = ""
+        if color_format[0]=='-':
+            args.remove(color_format)
+        if len(args) == 3 or (len(args)==4 and color_format[0]=='-'):  # format is: filename instructions_file
+            color_format = "" if color_format is None else color_format
             out_filename = args[1]
             instructions_filename = args[2]
         else:  # format is: format filename instructions_file
@@ -329,5 +332,10 @@ if __name__ == "__main__":
     countries_ids = [x[0] for x in color_lst]
     bbox = get_bbox(countries_ids, out_filename, lines)
     svg_lines = create_file(color_lst, lines)
-    svg_lines = add_bbox_to_file(out_filename, bbox, svg_lines)
-    mark_small_contries(color_lst, out_filename, bbox, svg_lines)
+    if "bilateral" in color_format:
+        svg_lines = add_bbox_to_file(out_filename, bbox, svg_lines)
+        mark_small_contries(color_lst, out_filename, bbox, svg_lines)
+    else:
+        f = open(out_filename, 'w')
+        f.writelines(svg_lines)
+        f.close()
